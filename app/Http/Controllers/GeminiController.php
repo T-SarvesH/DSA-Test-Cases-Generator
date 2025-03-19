@@ -7,20 +7,34 @@ use App\Services\GeminiService;
 
 class GeminiController extends Controller
 {
+    protected $geminiService;
+
+    public function __construct(GeminiService $geminiService)
+    {
+        $this->geminiService = $geminiService;
+    }
+
+    public function showForm()
+    {
+        return view('gemini-form');
+    }
+
     public function generateText(Request $request)
     {
-        \Log::info('Request Method:', [$request->method()]);  // Debug log
-        \Log::info('Request Data:', $request->all());         // Log request data
-
         $request->validate([
             'prompt' => 'required|string',
         ]);
-
+    
         $response = $this->geminiService->generateText($request->input('prompt'));
-
-        return response()->json([
+    
+        // Check if the response is correctly received
+        if ($response === null || empty($response)) {
+            $response = 'No response received from Gemini API.';
+        }
+    
+        return view('gemini-form', [
+            'prompt' => $request->input('prompt'),
             'response' => $response
         ]);
     }
-
 }

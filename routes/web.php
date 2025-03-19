@@ -5,6 +5,7 @@ use App\Http\Controllers\TestCaseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeminiController;
 
+Route::get('/generate-form', [GeminiController::class, 'showForm'])->name('gemini.form');
 Route::post('/generate-text', [GeminiController::class, 'generateText'])->name('gemini.generate');
 
 
