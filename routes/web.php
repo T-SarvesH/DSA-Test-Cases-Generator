@@ -3,6 +3,10 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestCaseController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\GeminiController;
+
+Route::post('/generate-text', [GeminiController::class, 'generateText'])->name('gemini.generate');
+
 
 Route::get('/', function () {
     return view('welcome');
