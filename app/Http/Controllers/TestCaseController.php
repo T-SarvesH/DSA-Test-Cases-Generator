@@ -9,7 +9,7 @@ class TestCaseController extends Controller
 {
     public function index()
     {
-        $testCases = TestCase::all();
+        $testCases = TestCase::paginate(10);
         return view('test_cases.index', compact('testCases'));
     }
 }
