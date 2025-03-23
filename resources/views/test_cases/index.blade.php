@@ -3,6 +3,10 @@
 @section('content')
 <div class="container">
     <h2 class="mb-4">DSA Test Cases</h2>
+    <form action="{{ route('test_cases.index') }}" method="get">
+        <input type="text" name="query" placeholder="Search...">
+        <button type="submit">Search</button>
+    </form>
     <table class="min-w-full border-collapse border border-gray-300">
         <thead>
             <tr class="bg-gray-200">
