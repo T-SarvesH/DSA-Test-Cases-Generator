@@ -5,10 +5,13 @@ use App\Http\Controllers\TestCaseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeminiController;
 
-Route::get('/generate-form', [GeminiController::class, 'showForm'])->name('gemini.form');
-Route::post('/generate-text', [GeminiController::class, 'generateText'])->name('gemini.generate');
+Route::get('/leetcode-form', [GeminiController::class, 'showForm'])->name('gemini.form');
+Route::post('/generate-descTitle', [GeminiController::class, 'scrapDesctitle'])->name('generate.descTitle');
+Route::get('/codeforces-form', [GeminiController::class, 'codeforcedForm'])->name('codeforces.form');
+#For Description generation
 
 
+Route::get('/test-cases', [TestCaseController::class, 'index'])->name('test_cases.index');
 // Route::get('/', function () {
 //     return view('welcome');
 // });

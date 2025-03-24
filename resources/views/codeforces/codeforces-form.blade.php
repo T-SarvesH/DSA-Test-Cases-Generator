@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Leetcode Test Case Generator</title>
+    <title>Codeforces Test Case Generator</title>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
 <body>
-    <h1>Leetcode Test Case Generator</h1> <br>
+    <h1>Codeforces Test Case Generator</h1> <br>
     <br>
     <br>
 

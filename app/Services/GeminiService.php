@@ -4,6 +4,7 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Log;
 
 class GeminiService
 {
@@ -20,21 +21,41 @@ class GeminiService
     {
         $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=' . $this->apiKey;
 
-    try {
-        $response = $this->client->post($url, [
-            'json' => [
-                'contents' => [
-                    ['parts' => [['text' => $prompt]]]
+        try {
+            $response = $this->client->post($url, [
+                'json' => [
+                    'contents' => [
+                        ['parts' => [['text' => $prompt]]]
+                    ]
                 ]
-            ]
-        ]);
+            ]);
 
-        $result = json_decode($response->getBody(), true);
+            $result = json_decode($response->getBody(), true);
 
-        // Handle response structure
-        return $result['candidates'][0]['content']['parts'][0]['text'] ?? 'No response generated.';
-    } catch (RequestException $e) {
-        return 'Error: ' . $e->getMessage();
-    }
+            // Detailed response structure checks
+            if (isset($result['candidates']) && is_array($result['candidates']) && !empty($result['candidates'])) {
+                if (isset($result['candidates'][0]['content']['parts']) && is_array($result['candidates'][0]['content']['parts']) && !empty($result['candidates'][0]['content']['parts'])) {
+                    if (isset($result['candidates'][0]['content']['parts'][0]['text'])) {
+                        return $result['candidates'][0]['content']['parts'][0]['text'];
+                    } else {
+                        Log::error('Gemini API: Text not found in response.');
+                        return 'Gemini API: Text not found in response.';
+                    }
+                } else {
+                    Log::error('Gemini API: Content parts not found in response.');
+                    return 'Gemini API: Content parts not found in response.';
+                }
+            } else {
+                Log::error('Gemini API: Candidates not found in response.');
+                return 'Gemini API: Candidates not found in response.';
+            }
+
+        } catch (RequestException $e) {
+            Log::error('Gemini API Request Error: ' . $e->getMessage());
+            return 'Gemini API Request Error: ' . $e->getMessage();
+        } catch (\Exception $e) {
+            Log::error('Gemini API General Error: ' . $e->getMessage());
+            return 'Gemini API General Error: ' . $e->getMessage();
+        }
     }
 }
