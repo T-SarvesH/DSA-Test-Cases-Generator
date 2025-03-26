@@ -11,7 +11,7 @@ Route::get('/codeforces-form', [GeminiController::class, 'codeforcedForm'])->nam
 #For Description generation
 
 
-Route::get('/test-cases', [TestCaseController::class, 'index'])->name('test_cases.index');
+// Route::get('/test-cases', [TestCaseController::class, 'index'])->name('test_cases.index');
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/', [TestCaseController::class, 'index'])->name('test_cases.index');
+    Route::delete('/', [TestCaseController::class, 'destroy'])->name('test_cases.destroy');
 });
 
 require __DIR__.'/auth.php';

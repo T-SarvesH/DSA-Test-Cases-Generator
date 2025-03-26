@@ -16,4 +16,11 @@ class TestCaseController extends Controller
         $testCases = DB::select('select * from test_cases where problem_title is ?', [$input_problem_title]);
         return view('test_cases.index', compact('testCases'));
     }
+
+
+    public function destroy(Request $request){
+        // Delete from the databese
+        $id_to_delete = $request->input('delId');
+        DB::delete('delete from test_cases where id is ?', [$id_to_delete]);
+    }
 }
