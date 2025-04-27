@@ -75,19 +75,10 @@ class GeminiController extends Controller
 
                 // Example: "Just return me the description... for the problem no: 123 on the Codeforces platform and absolutely nothing else"
                 $descriptionPrompt = "Just return me the description in a single sentence for the problem no: {$id}{$platformContext} and absolutely nothing else";
-                // --- End MODIFIED PROMPTS ---
-
-
-                // Call the service to get title and description using the ID
-                // Service should return string or null on failure/empty response
                 $titleResponse = $this->geminiService->generateText($titlePrompt);
                 $descriptionResponse = $this->geminiService->generateText($descriptionPrompt);
 
 
-                // Prepare data for JSON response
-                // If generateText returns null (due to API issues or empty clean response),
-                // use "Title Not found" / "Description Not found".
-                // The frontend JS will then check for these specific strings.
                 $titleToReturn = $titleResponse ?? 'Title Not found'; // Use null coalescing operator
                 $descriptionToReturn = $descriptionResponse ?? 'Description Not found';
 
