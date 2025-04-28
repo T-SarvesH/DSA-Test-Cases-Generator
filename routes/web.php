@@ -8,6 +8,7 @@ use App\Http\Controllers\GeminiController;
 Route::get('/leetcode-form', [GeminiController::class, 'showForm'])->name('gemini.form');
 Route::post('/generate-descTitle', [GeminiController::class, 'scrapDesctitle'])->name('generate.descTitle');
 Route::get('/codeforces-form', [GeminiController::class, 'codeforcedForm'])->name('codeforces.form');
+Route::post('generate-test-cases', [GeminiController::class, 'generateTestCases'])->name('generate.test_cases');
 #For Description generation
 
 

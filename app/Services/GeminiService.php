@@ -19,7 +19,7 @@ class GeminiService
 
     public function generateText($prompt)
     {
-        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-pro:generateContent?key=' . $this->apiKey;
+        $url = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=' . $this->apiKey;
 
         try {
             $response = $this->client->post($url, [
