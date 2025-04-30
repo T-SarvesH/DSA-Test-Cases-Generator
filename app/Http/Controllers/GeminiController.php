@@ -217,12 +217,13 @@ class GeminiController extends Controller
                                 . "Provide the output test cases below in a clear, well-formatted text format.\n\n"
                                 . "Start the edge cases section with exactly 'EDGE CASES:'.\n" // Use clear markers
                                 . "Start the normal cases section with exactly 'NORMAL CASES:'.\n" // Use clear markers
-                                . "For each test case, only provide 'Input:' and each test case should be on a separate lines.\n"
+                                . "For each test case end with a ',' char and each test case should be on a separate lines.\n"
                                 . "Separate test cases with a blank line.\n"
                                 . "Do not include any other text before 'EDGE CASES:' or after the last normal case output."
                                 . "The test cases should be in a 65: 35 ratio (70% edge cases and rest normal cases)"
                                 ."Generate test cases according to range given in the constraints and also generate test cases having a large size as well"
-                                . "Dont repeat any test cases and generate a total of around 100 test cases";
+                                . "Dont repeat any test cases and generate a total of around 100 test cases"
+                                . "If there are multiple inputs in a test case seperate them with the keyword 'and' ";
                 
                 // --- End MODIFIED Prompt ---
 
