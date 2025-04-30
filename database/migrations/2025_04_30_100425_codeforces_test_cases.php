@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('test_cases', function (Blueprint $table) {
+        Schema::create('codeforces_test_cases', function (Blueprint $table) {
             $table->id();
-            $table->string('problem_title');
-            $table->text('description');
-            $table->text('input');
-            $table->text('expected_output');
+            $table->string('Question Id')->unique();
+            $table->string('Question Title');
+            $table->text('Question Description');
+            $table->string('Constraints');
+            $table->text('Normal Test Cases');
+            $table->text('Edge Test Cases');
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('test_cases');
+        Schema::dropIfExists('codeforces_test_cases');
     }
 };
