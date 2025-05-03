@@ -11,7 +11,9 @@
     <br>
     <br>
 
-    <form id="problemForm"> {{-- Give the form an ID --}}
+    <form id="problemForm" action="{{route('save.LC.test_cases')}}" method="post"> {{-- Give the form an ID --}}
+        @csrf {{-- <<< ADDED: This directive is crucial for CSRF protection --}}
+
         <fieldset> {{-- Using fieldset for semantic grouping --}}
             <legend>Problem Details</legend>
 
@@ -63,9 +65,9 @@
             <textarea name="NormalCases" id="NormalCasesArea" rows="8" cols="50" readonly></textarea><br> {{-- Added readonly --}}
          </fieldset>
 
-
+        <br>
+        <button type="submit" id="submitBtnArea", name="SubmitButton">Submit</button> {{-- Submit button for the form --}}
     </form>
-
     {{-- Link your JavaScript file --}}
     <script src="{{ asset('js/gen_description.js') }}"></script>
     {{-- If using Vite in Laravel 9+, use @vite('resources/js/app.js') or similar --}}

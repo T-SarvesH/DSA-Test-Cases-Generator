@@ -14,9 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // --- Variable to hold the debounce timer ID for the INPUT event ---
     let debounceTimer = null;
-    const debounceDelay = 5000; // 5000 milliseconds = 5 seconds
-    // --- End Debounce Timer ---
-
+    const debounceDelay = 2500; 
 
     // --- Get last segment of the current page URL and determine platform name (on page load) ---
     // Ensure required elements for the primary fetch and button exist before proceeding
@@ -271,8 +269,5 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     // --- End Button Listener ---
-
-
     // Removed the optional auto-fetch trigger
-
 });

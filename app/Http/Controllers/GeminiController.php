@@ -223,7 +223,8 @@ class GeminiController extends Controller
                                 . "The test cases should be in a 65: 35 ratio (70% edge cases and rest normal cases)"
                                 ."Generate test cases according to range given in the constraints and also generate test cases having a large size as well"
                                 . "Dont repeat any test cases and generate a total of around 100 test cases"
-                                . "If there are multiple inputs in a test case seperate them with the keyword 'and' ";
+                                . "If there are multiple inputs in a test case seperate them with the keyword 'and' , if not dont use the keyword 'and'"
+                                . "Dont give under any circumstances the expected output for any test case";
                 
                 // --- End MODIFIED Prompt ---
 
