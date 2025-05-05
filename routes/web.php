@@ -6,12 +6,14 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeminiController;
 use App\Http\Controllers\LeetcodeSave;
 
-Route::get('/leetcode-form', [GeminiController::class, 'showForm'])->name('gemini.form');
-Route::post('/generate-descTitle', [GeminiController::class, 'scrapDesctitle'])->name('generate.descTitle');
-Route::get('/codeforces-form', [GeminiController::class, 'codeforcedForm'])->name('codeforces.form');
-Route::post('generate-test-cases', [GeminiController::class, 'generateTestCases'])->name('generate.test_cases');
-Route::post('/save-LC-test-cases', [LeetcodeSave::class, 'storeTestCases'])->name('save.LC.test_cases');
-Route::get('/display-LC-test-cases', [LeetcodeSave::class, 'displayTestCases'])->name('display.LC.test_cases');
+Route::middleware('auth')->group(function () {
+    Route::get('/leetcode-form', [GeminiController::class, 'showForm'])->name('gemini.form');
+    Route::post('/generate-descTitle', [GeminiController::class, 'scrapDesctitle'])->name('generate.descTitle');
+    Route::get('/codeforces-form', [GeminiController::class, 'codeforcedForm'])->name('codeforces.form');
+    Route::post('generate-test-cases', [GeminiController::class, 'generateTestCases'])->name('generate.test_cases');
+    Route::post('/save-LC-test-cases', [LeetcodeSave::class, 'storeTestCases'])->name('save.LC.test_cases');
+    Route::get('/display-LC-test-cases', [LeetcodeSave::class, 'displayTestCases'])->name('display.LC.test_cases');
+});
 
 Route::get('/dashboard', function () {
     return view('dashboard');

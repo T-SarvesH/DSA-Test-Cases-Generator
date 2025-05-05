@@ -23,7 +23,7 @@ class GeminiController extends Controller
 
     public function codeforcedForm()
     {
-        return view('/codeforces/codeforces-form');
+        return view('codeforces.codeforces-form');
     }
 
     /**
