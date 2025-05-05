@@ -5,6 +5,7 @@ use App\Http\Controllers\TestCaseController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeminiController;
 use App\Http\Controllers\LeetcodeSave;
+use App\Http\Controllers\CodeforcesSave;
 
 Route::middleware('auth')->group(function () {
     Route::get('/leetcode-form', [GeminiController::class, 'showForm'])->name('gemini.form');
@@ -13,6 +14,8 @@ Route::middleware('auth')->group(function () {
     Route::post('generate-test-cases', [GeminiController::class, 'generateTestCases'])->name('generate.test_cases');
     Route::post('/save-LC-test-cases', [LeetcodeSave::class, 'storeTestCases'])->name('save.LC.test_cases');
     Route::get('/display-LC-test-cases', [LeetcodeSave::class, 'displayTestCases'])->name('display.LC.test_cases');
+    Route::post('/save-C-test-cases', [CodeforcesSave::class, 'storeTestCases'])->name('save.C.test_cases');
+    Route::get('/display-C-test-cases', [CodeforcesSave::class, 'displayTestCases'])->name('display.C.test_cases');
 });
 
 Route::get('/dashboard', function () {
