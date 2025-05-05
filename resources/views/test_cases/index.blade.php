@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+{{-- 
 @section('content')
 <div class="container">
     <h2 class="mb-4">DSA Test Cases</h2>
@@ -34,4 +34,4 @@
         </tbody>
     </table>
 </div>
-@endsection
+@endsection --}}
