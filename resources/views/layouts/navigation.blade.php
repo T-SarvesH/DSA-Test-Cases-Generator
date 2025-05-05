@@ -37,9 +37,9 @@
                         <div x-show="open" @click.away="open = false"
                             class="absolute mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 z-50">
                             <div class="py-1">
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                <a href="{{route('display.LC.test_cases')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                                     Leetcode</a>
-                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Codeforces</a>
+                                <a href="{{route('display.C.test_cases')}}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Codeforces</a>
                             </div>
                         </div>
                     </div>
