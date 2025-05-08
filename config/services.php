@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'leetcode' =>[
+        
+        'baseUrl'=> env('LEETCODE_API', null),
+    ],
+
 ];
