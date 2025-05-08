@@ -18,7 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/display-LC-test-cases', [LeetcodeSave::class, 'displayTestCases'])->name('display.LC.test_cases');
     Route::post('/save-C-test-cases', [CodeforcesSave::class, 'storeTestCases'])->name('save.C.test_cases');
     Route::get('/display-C-test-cases', [CodeforcesSave::class, 'displayTestCases'])->name('display.C.test_cases');
-    Route::get('/userDashboard',[dashboard::class, 'fetchUserDetails'])->name('userDetails');
+    Route::get('/userDashboard',[dashboard::class, 'main'])->name('main');
 });
 
 Route::get('/dashboard', function () {
