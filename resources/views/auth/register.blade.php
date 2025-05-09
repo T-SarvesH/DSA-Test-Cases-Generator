@@ -16,6 +16,13 @@
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
+        <!-- Leetcode Id -->
+        <div class="mt-4">
+            <x-input-label for="leetcode_id" :value="__('Leetcode ID')" />
+            <x-text-input id="leetcode_id" class="block mt-1 w-full" type="text" name="leetcode_id" :value="old('leetcode_id')" required autocomplete="leetcode_id" />
+            <x-input-error :messages="$errors->get('leetcode_id')" class="mt-2" />
+        </div>
+
         <!-- Password -->
         <div class="mt-4">
             <x-input-label for="password" :value="__('Password')" />
