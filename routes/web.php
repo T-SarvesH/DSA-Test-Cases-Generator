@@ -19,7 +19,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/display-C-test-cases', [CodeforcesSave::class, 'displayTestCases'])->name('display.C.test_cases');
 
     // This is your route, now correctly pointing to the PascalCase Dashboard class
-    Route::get('/userDashboard', [Dashboard::class, 'main'])->name('dashboard');
+    Route::get('/userDashboard', [Dashboard::class, 'main'])->name('userdashboard');
 });
 
 // KEEP this /dashboard route for now if you still want to use /dashboard later
