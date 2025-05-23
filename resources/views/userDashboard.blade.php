@@ -1,243 +1,123 @@
-{{-- resources/views/userDashboard.blade.php --}}
-
 <x-app-layout>
     @section('content')
     @php
-    // Placeholder data structure mirroring potential API responses
-    // Replace this entire $dashboardDataPlaceholder array and the logic below
-    // with fetching your actual data from the controller
-    $dashboardDataPlaceholder = [
-        'userDetails' => [
-            'uname' => 't1Sr_',
-            'ranking' => '10000', // Assuming this is rank, not score based on image
-            'avatarUrl' => 'https://preview.redd.it/my-art-of-okarun-v0-mre5in3890ud1.jpeg?width=1080&crop=smart&auto=webp&s=d0965c8bee2eb8dd9dd89d78839bf570f6da1dd6', // Placeholder URL
-            // Add other user details here
-        ],
-        'dailyQuestion' => [
-            'title' => 'Two Sum',
-            'acceptanceRate' => '55.5%',
-            'topics' => ['Array', 'Hash Table', 'Two Pointers'], // Placeholder topics/tags
-            // Add URL to the question form if you have one
-            'formUrl' => '#', // Placeholder URL
-        ],
-        'solvedInfo' => [ // Data for Solved Problems Doughnut
-            'easySolved' => 197,
-            'mediumSolved' => 267,
-            'hardSolved' => 20,
-        ],
-         'topicsInfo' => [ // Data for Topics Histogram
-            // Placeholder data for most practiced topics
+    // Practice Info is kept as a placeholder as per your request
+    $practiceInfo = [
+         'topicsInfo' => [
             ['topic' => 'Array', 'count' => 350],
             ['topic' => 'String', 'count' => 280],
             ['topic' => 'Trie', 'count' => 50],
             ['topic' => 'Sorting', 'count' => 100],
             ['topic' => 'Greedy', 'count' => 100],
             ['topic' => 'Binary Search', 'count' => 125],
-            // Add more placeholder topics
-         ],
-         // --- Placeholder Data for Streak Calendar (Approx. 2 Months, Grouped) ---
-         'streakInfo' => [
-             'currentStreak' => 7, // Example: 7 consecutive days
-             'longestStreak' => 15, // Example: Longest streak ever
-             // Data for calendar: Grouped by month, each month contains weeks
-             'activityLastTwoMonths' => [
-                 'March' => [ // Older month (e.g., March)
-                     // Each inner array is a week (7 days)
-                     [false, false, true, true, true, false, true],
-                     [true, true, true, true, true, false, false],
-                     [true, true, true, true, true, true, true],
-                     [false, true, true, false, true, true, true],
-                 ],
-                 'April' => [ // Newer month (e.g., April)
-                      [true, true, true, true, true, true, true], // Part of current streak
-                      [false, true, true, false, true, true, true],
-                      [true, true, true, true, false, true, true],
-                      [true, true, true, true, true, true, true], // Part of current streak
-                      [true, false, false, true, true, true, true], // Spans into next month if needed
-                 ],
-                  'May' => [ // Current partial month (e.g., May)
-                      [true, true, false, false, false, false, false], // Part of current streak
-                  ],
-             ],
          ],
     ];
 
-    // Calculate data and pass to JavaScript for charts
-    // This logic should also be updated when fetching real data
-    $easySolved = $dashboardDataPlaceholder['solvedInfo']['easySolved'] ?? 0;
-    $mediumSolved = $dashboardDataPlaceholder['solvedInfo']['mediumSolved'] ?? 0;
-    $hardSolved = $dashboardDataPlaceholder['solvedInfo']['hardSolved'] ?? 0;
-    $totalSolved = $easySolved + $mediumSolved + $hardSolved; // Calculate total
+    // These now correctly pull from $reqdData coming from your controller
+    $easySolved = $reqdData['questionsInfo']['easySolved'] ?? 0;
+    $mediumSolved = $reqdData['questionsInfo']['mediumSolved'] ?? 0;
+    $hardSolved = $reqdData['questionsInfo']['hardSolved'] ?? 0;
+    $totalSolved = $easySolved + $mediumSolved + $hardSolved;
 
-    // --- Updated Vibrant Colors for Doughnut Chart ---
+    // --- UPDATED CHART COLORS FOR AESTHETICS ---
     $solvedChartData = [
         'labels' => ['Easy', 'Medium', 'Hard'],
         'datasets' => [[
             'label' => 'Problems Solved',
             'data' => [$easySolved, $mediumSolved, $hardSolved],
             'backgroundColor' => [
-                'rgba(40, 167, 69, 0.9)', // Vibrant Green (Success)
-                'rgba(253, 184, 3, 0.9)', // Vibrant Orange (Warning)
-                'rgba(220, 53, 69, 0.9)', // Vibrant Red (Danger)
+                'rgba(52, 211, 153, 0.9)',   // Tailwind Emerald-400
+                'rgba(251, 191, 36, 0.9)',   // Tailwind Amber-400
+                'rgba(239, 68, 68, 0.9)',    // Tailwind Red-500
             ],
-            'borderColor' => [ // Use slightly darker or same for border
-                'rgba(34, 139, 34, 1)', // Forest Green
-                'rgba(255, 140, 0, 1)',  // Dark Orange
-                'rgba(178, 34, 34, 1)',  // Fire Brick
+            'borderColor' => [
+                'rgba(16, 185, 129, 1)',     // Tailwind Emerald-500
+                'rgba(245, 158, 11, 1)',     // Tailwind Amber-500
+                'rgba(220, 38, 38, 1)',      // Tailwind Red-600
             ],
-            'borderWidth' => 1
+            'borderWidth' => 2
         ]]
     ];
 
-    // Prepare data for Topics Histogram
+    // Topic labels and counts now correctly pull from the hardcoded $practiceInfo
     $topicLabels = [];
     $topicCounts = [];
-    foreach ($dashboardDataPlaceholder['topicsInfo'] as $topicData) {
+    foreach ($practiceInfo['topicsInfo'] as $topicData) {
         $topicLabels[] = $topicData['topic'];
         $topicCounts[] = $topicData['count'];
     }
 
-    // --- Updated Vibrant Colors for Bar Chart ---
-    // Using an array of colors for more vibrancy
+    // --- DIVERSE & VIBRANT PALETTE FOR TOPICS CHART ---
     $topicChartColors = [
-        'rgba(0, 123, 255, 0.9)',  // Vibrant Blue
-        'rgba(255, 193, 7, 0.9)',  // Vibrant Yellow
-        'rgba(23, 162, 184, 0.9)', // Vibrant Teal
-        'rgba(108, 117, 125, 0.9)', // Muted Gray for less practiced
-        'rgba(40, 167, 69, 0.9)',  // Vibrant Green
-        'rgba(111, 66, 193, 0.9)', // Vibrant Purple
-         // Add more colors if you have more topics
+        'rgba(59, 130, 246, 0.8)',   // Blue-500
+        'rgba(168, 85, 247, 0.8)',   // Purple-500
+        'rgba(20, 184, 166, 0.8)',   // Teal-500
+        'rgba(249, 115, 22, 0.8)',   // Orange-500
+        'rgba(99, 102, 241, 0.8)',   // Indigo-500
+        'rgba(236, 72, 153, 0.8)',   // Pink-500
+        'rgba(52, 211, 153, 0.8)',   // Emerald-400
+        'rgba(239, 68, 68, 0.8)',    // Red-500
     ];
-
 
     $topicChartData = [
         'labels' => $topicLabels,
         'datasets' => [[
             'label' => 'Problems Practiced',
             'data' => $topicCounts,
-             // Assign colors from the palette, repeating if necessary
              'backgroundColor' => array_map(function($index) use ($topicChartColors) {
                  return $topicChartColors[$index % count($topicChartColors)];
              }, array_keys($topicLabels)),
              'borderColor' => array_map(function($index) use ($topicChartColors) {
-                 // Use a slightly darker version for border or just use the same color
                   $color = $topicChartColors[$index % count($topicChartColors)];
-                  // Basic logic to make border slightly darker (example: reduce alpha or adjust rgb)
                   if (strpos($color, 'rgba') === 0) {
                       $parts = explode(',', $color);
-                      $alpha = (float)trim($parts[3], ' )');
-                      $parts[3] = ($alpha * 1.1 > 1 ? 1 : $alpha * 1.1) . ')'; // Increase alpha slightly
-                      return implode(',', $parts);
+                      $r = (int)trim($parts[0], 'rgba(');
+                      $g = (int)trim($parts[1]);
+                      $b = (int)trim($parts[2]);
+                      return 'rgba(' . ($r * 0.8) . ',' . ($g * 0.8) . ',' . ($b * 0.8) . ',' . trim($parts[3]);
                   }
-                 return $color; // Or just return the same color if rgba logic is too complex
+                 return $color;
              }, array_keys($topicLabels)),
              'borderWidth' => 1,
         ]]
     ];
 
-    // Data for Streak Calendar - now structured by month
-    $activityByMonth = $dashboardDataPlaceholder['streakInfo']['activityLastTwoMonths'] ?? [];
-    $currentStreak = $dashboardDataPlaceholder['streakInfo']['currentStreak'] ?? 0;
-    $longestStreak = $dashboardDataPlaceholder['streakInfo']['longestStreak'] ?? 0;
+    @endphp
 
-@endphp
-        {{-- Main content container with padding and centering --}}
-        {{-- Increased max-width slightly for more space if needed --}}
+    {{-- Loading Overlay --}}
+    <div id="loading-overlay" class="fixed inset-0 bg-white/80 dark:bg-gray-900/80 flex items-center justify-center flex-col z-[9999]">
+        <div class="animate-spin rounded-full h-12 w-12 border-4 border-gray-300 dark:border-gray-700 border-t-blue-500 mb-4"></div>
+        <p class="text-gray-700 dark:text-gray-300 text-lg">Loading data...</p>
+    </div>
+
+    <div class="bg-gray-50 min-h-screen">
         <div class="max-w-screen-xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
 
-            {{-- --- Two-Column Layout Container --- --}}
-            {{-- All cards are now inside this grid --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"> {{-- Create a 2-column grid on medium screens and up, with gap --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12">
 
-                {{-- --- Card 1: User LeetCode Info (Expanded Horizontally - spans 2 columns) --- --}}
-                {{-- Added md:col-span-2 to make it span both columns on medium screens and up --}}
-                 <div class="bg-white shadow-md rounded-lg p-6 mb-4 md:col-span-2 hover:shadow-lg transition duration-200 ease-in-out"> {{-- Reduced mb- as gap handles spacing --}}
-                    <h2 class="text-xl font-semibold text-gray-900 mb-4">LeetCode Profile</h2>
-                    <div class="flex items-center space-x-6"> {{-- Increased space-x --}}
-                        {{-- Placeholder for Profile Picture --}}
-                        {{-- Updated border color to a vibrant accent --}}
-                        <img src="{{$dashboardDataPlaceholder['userDetails']['avatarUrl']}}" alt="User Profile Picture"
-                             class="w-24 h-24 rounded-full object-cover border-4 border-blue-500 shadow-lg">
+                <div class="flex flex-col gap-8">
 
-                        <div>
-                            {{-- Placeholder for Username and Rank --}}
-                            <p class="text-2xl font-bold text-gray-800">{{$dashboardDataPlaceholder['userDetails']['uname']}}</p>
-                            <p class="text-lg text-gray-700">Rank: {{number_format($dashboardDataPlaceholder['userDetails']['ranking'])}}</p>
-                            {{-- Add other specific user details here if needed --}}
-                        </div>
-                    </div>
-                </div>
+                    <div class="bg-white shadow-lg rounded-xl p-8 transform transition-all duration-300 hover:scale-[1.005] hover:shadow-2xl">
+                        <h2 class="text-3xl font-extrabold text-gray-900 mb-6 border-b-2 border-blue-500 pb-2 inline-block">LeetCode Profile</h2>
+                        <div class="flex items-center space-x-8">
+                            <img src="{{$reqdData['userDetails']['avatarUrl'] ?? 'https://via.placeholder.com/128/3B82F6/FFFFFF?text=User+Pic'}}" alt="User Profile Picture"
+                                 class="w-28 h-28 rounded-full object-cover border-4 border-blue-600 shadow-xl flex-shrink-0">
 
-                {{-- --- Left Column (Streak and Daily Question) --- --}}
-                {{-- This div now represents the left column of the 2nd row onwards --}}
-                <div class="flex flex-col gap-8"> {{-- Stack items vertically in the left column with gap --}}
-
-                    {{-- --- Card 2: Streak Calendar (Expanded Sideways) --- --}}
-                    {{-- Added subtle hover effect and structure for calendar grid --}}
-                     <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition duration-200 ease-in-out">
-                        <h2 class="text-xl font-semibold text-gray-900 mb-4">Coding Streak</h2>
-
-                        <div class="flex items-center justify-between mb-4">
-                             {{-- Current Streak --}}
                             <div>
-                                <p class="text-gray-600 text-sm">Current Streak</p>
-                                <p class="text-2xl font-bold text-green-600">{{ $currentStreak }} Days</p> {{-- Use a vibrant color --}}
-                            </div>
-                            {{-- Longest Streak --}}
-                            <div>
-                                <p class="text-gray-600 text-sm text-right">Longest Streak</p>
-                                <p class="text-2xl font-bold text-purple-600 text-right">{{ $longestStreak }} Days</p> {{-- Use another vibrant color --}}
+                                <p class="text-4xl font-extrabold text-gray-800 mb-1">{{$reqdData['userDetails']['uname'] ?? 'N/A'}}</p>
+                                <p class="text-xl text-gray-600">Global Rank: <span class="font-bold text-blue-700">{{number_format($reqdData['userDetails']['ranking'] ?? 0)}}</span></p>
                             </div>
                         </div>
-
-                        {{-- Calendar Grid Representation - Expanded Sideways --}}
-                        {{-- Main container for horizontal calendar layout with scrolling --}}
-                        <div class="flex overflow-x-auto pb-2 gap-0.5 scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-100"> {{-- Added gap-0.5 here for space between week columns --}}
-                             @foreach($activityByMonth as $monthName => $weeks)
-                                {{-- Container for Month Label and its weeks --}}
-                                <div class="flex flex-col mr-2"> {{-- Added mr-2 for space between month blocks --}}
-                                    {{-- Month Label (positioned above weeks) --}}
-                                     <h4 class="text-sm font-semibold text-gray-800 mb-1">{{ $monthName }}</h4>
-                                    <div class="flex gap-0.5"> {{-- Flex container for weeks (arranged horizontally within the month block) --}}
-                                        @foreach($weeks as $week)
-                                            {{-- Flex column for each week (7 days) --}}
-                                            <div class="flex flex-col gap-0.5">
-                                                @foreach($week as $dayActive)
-                                                    {{-- Each day box --}}
-                                                    <div class="w-4 h-4 rounded-sm
-                                                        @if($dayActive)
-                                                            bg-green-500 {{-- Vibrant color for active days --}}
-                                                        @else
-                                                            bg-gray-200 {{-- Muted color for inactive days --}}
-                                                        @endif
-                                                        " title="{{ $dayActive ? 'Active' : 'Inactive' }}"> {{-- Add tooltip --}}
-                                                    </div>
-                                                @endforeach
-                                            </div>
-                                        @endforeach
-                                    </div>
-                                </div>
-                             @endforeach
-                        </div>
-                         {{-- Updated label --}}
-                         <p class="text-right text-gray-500 text-xs mt-2">Last {{ count($activityByMonth) }} months (approx.) (Scroll horizontally)</p> {{-- Adjusted label based on data --}}
                     </div>
 
-
-                    {{-- --- Card 3: Daily LeetCode Question --- --}}
-                    {{-- Added subtle hover effect --}}
-                     <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition duration-200 ease-in-out">
-                        <h2 class="text-xl font-semibold text-gray-900 mb-4">Daily LeetCode Question</h2>
-                        {{-- Placeholder for Question Title --}}
-                        <h3 class="text-lg font-semibold text-gray-800 mb-2">{{ $dashboardDataPlaceholder['dailyQuestion']['title'] ?? 'N/A' }}</h3> {{-- Use data --}}
-                        {{-- Placeholder for Acceptance Rate --}}
-                        {{-- Can add color hint based on rate using JS/conditional classes --}}
-                        <p class="text-gray-700 mb-2">Acceptance Rate: <span class="font-medium text-green-600">{{ $dashboardDataPlaceholder['dailyQuestion']['acceptanceRate'] ?? 'N/A' }}</span></p> {{-- Use data --}}
-                        {{-- Placeholder for Question Type/Tags --}}
-                        {{-- Styled topics as tags --}}
-                        <div class="flex flex-wrap gap-2 mb-4">
-                             @forelse($dashboardDataPlaceholder['dailyQuestion']['topics'] ?? [] as $topic) {{-- Loop through data --}}
-                                <span class="bg-blue-100 text-blue-800 text-sm font-medium px-2.5 py-0.5 rounded-full">
+                    <div class="bg-white shadow-lg rounded-xl p-6 transform transition-all duration-300 hover:scale-[1.005] hover:shadow-2xl">
+                        <h2 class="text-2xl font-bold text-gray-900 mb-5 border-b-2 border-green-500 pb-2 inline-block">Daily LeetCode Question</h2>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-3">{{ $reqdData['dailyQn']['title'] ?? 'N/A' }}</h3>
+                        {{-- Daily Qn acceptance rate was removed from your backend logic; if you add it back, uncomment this --}}
+                        {{-- <p class="text-gray-700 mb-3 text-lg">Acceptance Rate: <span class="font-bold text-green-600">{{ $reqdData['dailyQn']['acceptanceRate'] ?? 'N/A' }}</span></p> --}}
+                        <div class="flex flex-wrap gap-2 mb-6">
+                             @forelse($reqdData['dailyQn']['topics'] ?? [] as $topic)
+                                <span class="bg-blue-100 text-blue-800 text-sm font-semibold px-3 py-1 rounded-full shadow-sm">
                                     {{ $topic }}
                                 </span>
                              @empty
@@ -245,69 +125,52 @@
                              @endforelse
                         </div>
 
-
-                        {{-- Button to go to LC form --}}
-                        {{-- Updated button color to a vibrant blue and added hover effect --}}
-                        <a href="{{ $dashboardDataPlaceholder['dailyQuestion']['formUrl'] ?? '#' }}"
-                           class="inline-block bg-blue-600 text-white font-semibold py-2 px-4 rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-150 ease-in-out">
+                        <a href="{{ $reqdData['dailyQn']['link'] ?? '#' }}"
+                           class="inline-block bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 transition duration-150 ease-in-out text-lg">
                             Solve This Problem
                         </a>
                     </div>
 
-                </div> {{-- --- End Left Column --- --}}
+                </div>
 
 
-                {{-- --- Right Column (Charts) --- --}}
-                {{-- This div now represents the right column of the 2nd row onwards --}}
-                <div class="flex flex-col gap-8"> {{-- Stack items vertically in the right column with gap --}}
+                <div class="flex flex-col gap-8">
 
-                    {{-- --- Top Right Card: Solved Problems Doughnut Chart --- --}}
-                    {{-- Added subtle hover effect --}}
-                    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition duration-200 ease-in-out">
-                         <h2 class="text-xl font-semibold text-gray-900 mb-4">Total Solved by Difficulty</h2>
-                         {{-- Container for the Doughnut Chart --}}
-                         {{-- Ensured container helps with responsiveness --}}
-                         <div class="relative w-full h-80 flex items-center justify-center"> {{-- Added flex for centering --}}
+                    <div class="bg-white shadow-lg rounded-xl p-6 transform transition-all duration-300 hover:scale-[1.005] hover:shadow-2xl">
+                         <h2 class="text-2xl font-bold text-gray-900 mb-5 border-b-2 border-red-500 pb-2 inline-block">Total Solved by Difficulty</h2>
+                         <div class="relative w-full h-80 flex items-center justify-center">
                             <canvas id="solvedProblemsChart"></canvas>
-                            {{-- The center total text is handled by JS plugin --}}
                         </div>
                     </div>
 
-                    {{-- --- Bottom Right Card: Most Practiced Topics Histogram --- --}}
-                    {{-- Added subtle hover effect --}}
-                    <div class="bg-white shadow-md rounded-lg p-6 hover:shadow-lg transition duration-200 ease-in-out">
-                         <h2 class="text-xl font-semibold text-gray-900 mb-4">Most Practiced Topics</h2>
-                         {{-- Container for the Histogram Chart --}}
-                         {{-- Ensured container helps with responsiveness --}}
+                    <div class="bg-white shadow-lg rounded-xl p-6 transform transition-all duration-300 hover:scale-[1.005] hover:shadow-2xl">
+                         <h2 class="text-2xl font-bold text-gray-900 mb-5 border-b-2 border-purple-500 pb-2 inline-block">Most Practiced Topics</h2>
                          <div class="w-full h-80">
-                            <canvas id="topicsChart"></canvas> {{-- New canvas for histogram --}}
+                            <canvas id="topicsChart"></canvas>
                         </div>
                     </div>
 
-                </div> {{-- --- End Right Column --- --}}
+                </div>
 
-            </div> {{-- --- End Two-Column Layout --- --}}
+            </div>
 
-        </div> {{-- End max-w-screen-xl mx-auto py-8 px-4 sm:px-6 lg:px-8 --}}
+        </div>
 
-        {{-- --- Prepare Data in PHP (Placeholder Values) --- --}}
-        {{-- This block *MUST* be inside @section('content') --}}
+    <script>
+        window.solvedChartData = @json($solvedChartData);
+        window.totalSolved = {{$totalSolved}} ;
+        window.topicChartData = @json($topicChartData);
 
+        // Hide the loading overlay once the page content is fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.display = 'none';
+            }
+        });
+    </script>
 
-        <script>
-            console.log("Blade inline script running: About to define chart data");
-            window.solvedChartData = @json($solvedChartData);
-            window.totalSolved = {{$totalSolved}} ;
-            window.topicChartData = @json($topicChartData);
-             // No need to pass activity data to JS if rendering calendar in Blade
-            console.log("Blade inline script: Data defined on window:", window.solvedChartData, "Total:", window.totalSolved, "Topics:", window.topicChartData);
-        </script>
+    @vite('resources/js/dashboard.js')
 
-        {{-- Use @vite to include the processed dashboard.js --}}
-        {{-- This directive block *MUST* be inside @section('content') --}}
-        @vite('resources/js/dashboard.js')
-
-        {{-- --- END OF SECTIONS MOVED INSIDE --- --}}
-
-    @endsection {{-- END OF @section('content') --}}
+    @endsection
 </x-app-layout>

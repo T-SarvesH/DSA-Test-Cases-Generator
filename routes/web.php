@@ -6,8 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GeminiController;
 use App\Http\Controllers\LeetcodeSave;
 use App\Http\Controllers\CodeforcesSave;
-use App\Http\Controllers\dashboard;
-
+use App\Http\Controllers\Dashboard; // <-- MUST BE PASCALCASE 'D'
 
 Route::middleware('auth')->group(function () {
     Route::get('/leetcode-form', [GeminiController::class, 'showForm'])->name('gemini.form');
@@ -18,12 +17,17 @@ Route::middleware('auth')->group(function () {
     Route::get('/display-LC-test-cases', [LeetcodeSave::class, 'displayTestCases'])->name('display.LC.test_cases');
     Route::post('/save-C-test-cases', [CodeforcesSave::class, 'storeTestCases'])->name('save.C.test_cases');
     Route::get('/display-C-test-cases', [CodeforcesSave::class, 'displayTestCases'])->name('display.C.test_cases');
-    Route::get('/userDashboard',[dashboard::class, 'main'])->name('main');
+
+    // This is your route, now correctly pointing to the PascalCase Dashboard class
+    Route::get('/userDashboard', [Dashboard::class, 'main'])->name('dashboard');
 });
 
+// KEEP this /dashboard route for now if you still want to use /dashboard later
+// or remove it if you only intend to use /new-dashboard for testing
 Route::get('/dashboard', function () {
     return view('userDashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -33,4 +37,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/', [TestCaseController::class, 'destroy'])->name('test_cases.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';    
