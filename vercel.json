@@ -2,7 +2,7 @@
   "builds": [
     {
       "src": "public/index.php",       
-      "use": "@vercel/php",           
+      "use": "vercel-php",           
       "config": {
         "maxLambdaSize": "30mb",      
         "memory": 3008                
