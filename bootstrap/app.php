@@ -4,7 +4,18 @@ use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
 
-return Application::configure(basePath: dirname(__DIR__))
+// Get the application instance early to configure paths
+// This tries to ensure paths are set before cache attempts
+$app = new Application(dirname(__DIR__));
+
+// Configure storage and bootstrap cache paths for serverless environment
+if (isset($_ENV['VERCEL_ENV']) || isset($_ENV['VERCEL'])) {
+    $app->useStoragePath('/tmp/storage');
+    $app->useBootstrapPath('/tmp/bootstrap');
+}
+
+// Now, proceed with the standard Laravel application configuration
+return $app->configure(basePath: dirname(__DIR__)) // Note: basePath is passed twice now, but that's okay.
     ->withRouting(
         web: __DIR__.'/../routes/web.php',
         commands: __DIR__.'/../routes/console.php',
@@ -15,17 +26,4 @@ return Application::configure(basePath: dirname(__DIR__))
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
-    })
-    // Add this block BEFORE the ->create(); call
-    ->create(function (Application $app) { // Use the closure provided by create()
-        // Bind the public path to ensure it's correct for serving assets
-        $app->bind('path.public', function () {
-            return base_path('public');
-        });
-
-        // Configure storage and bootstrap cache paths for serverless environment
-        if (isset($_ENV['VERCEL_ENV']) || isset($_ENV['VERCEL'])) { // Vercel environment variables
-            $app->useStoragePath('/tmp/storage');
-            $app->useBootstrapPath('/tmp/bootstrap'); // For bootstrap/cache
-        }
-    }); // Make sure there's no semicolon here, it continues the chain
+    })->create();
