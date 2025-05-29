@@ -105,7 +105,7 @@
 
                             <div>
                                 <p class="text-4xl font-extrabold text-gray-800 mb-1">{{$reqdData['userDetails']['uname'] ?? 'N/A'}}</p>
-                                <p class="text-xl text-gray-600">Global Rank: <span class="font-bold text-blue-700">{{number_format($reqdData['userDetails']['ranking'] ?? 0)}}</span></p>
+                                <p class="text-xl text-gray-600">Global Rank: <span class="font-bold text-blue-700">{{number_format((int)$reqdData['userDetails']['ranking'] ?? 0)}}</span></p>
                             </div>
                         </div>
                     </div>
