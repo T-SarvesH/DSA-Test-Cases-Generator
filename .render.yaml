@@ -1,0 +1,47 @@
+services:
+  - type: web
+    name: laravel-vite-app
+    env: php
+    buildCommand: |
+      composer install --no-dev --optimize-autoloader
+      npm install
+      npm run build
+      php artisan migrate --force
+      php artisan key:generate
+    startCommand: php artisan serve --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: APP_ENV
+        value: production
+
+      - key: APP_DEBUG
+        value: false
+
+      - key: APP_URL
+        value: https://laravel-vite-app.onrender.com
+
+      - key: SESSION_DRIVER
+        value: database
+
+      - key: SESSION_LIFETIME
+        value: 120
+
+      - key: SESSION_ENCRYPT
+        value: false
+
+      - key: QUEUE_CONNECTION
+        value: database
+
+      - key: CACHE_STORE
+        value: database
+
+      - key: DB_CONNECTION
+        value: sqlite
+
+      - key: APP_KEY
+        generateValue: true
+
+      - key: GEMINI_API_KEY
+        sync: false  
+
+      - key: LEETCODE_API
+        sync: false  
