@@ -5,13 +5,16 @@ name: Deploy Laravel-React App to Azure Web App
 on:
   push:
     branches:
-      - main # Adjust this to your primary branch (e.g., master, develop)
-  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+      - main
+  workflow_dispatch:
+
+permissions:
+  id-token: write # This is required for OIDC
 
 env:
-  AZURE_WEBAPP_NAME: casecraft-app         # <<<<<<< IMPORTANT: REPLACE WITH YOUR AZURE APP SERVICE NAME >>>>>>>
-  PHP_VERSION: '8.4'                      # Ensure this matches your App Service runtime (e.g., '8.4', '8.3')
-  NODE_VERSION: '22'                      # Node.js LTS version for React build (e.g., '18', '20')
+  AZURE_WEBAPP_NAME: casecraft-app
+  PHP_VERSION: '8.4'
+  NODE_VERSION: '22'
 
 jobs:
   build-and-deploy:
@@ -21,21 +24,22 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # <<< THIS IS THE AZURE LOGIN STEP THAT USES YOUR SECRETS >>>
+    # Use OIDC for authentication
     - name: Azure Login
-      uses: azure/login@v1 # Using v1 is sufficient for this purpose
+      uses: azure/login@v1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+        auth-type: OIDC # Use OIDC authentication
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ env.PHP_VERSION }}
-        extensions: pdo_sqlite, gd, exif, bcmath, mbstring # Add any other PHP extensions your app needs
+        extensions: pdo_sqlite, gd, exif, bcmath, mbstring
         tools: composer
-        ini-values: post_max_size=100M, upload_max_filesize=100M # Example INI values if needed
+        ini-values: post_max_size=100M, upload_max_filesize=100M
 
     - name: Install Composer Dependencies
       run: composer install --no-dev --optimize-autoloader
@@ -44,7 +48,7 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: ${{ env.NODE_VERSION }}
-        cache: 'npm' # Cache node modules for faster builds
+        cache: 'npm'
 
     - name: Install Frontend Dependencies and Build
       run: |
@@ -56,6 +60,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        slot-name: 'production' # Keep as 'production' unless you use deployment slots
-        # The 'publish-profile' line is NOT here because azure/login handles authentication.
+        slot-name: 'production'
         package: .
