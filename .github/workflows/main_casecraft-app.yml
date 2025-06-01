@@ -8,10 +8,10 @@ on:
       - main
   workflow_dispatch:
 
-# Removed 'permissions: id-token: write' - it's only needed for OIDC, not for SERVICE_PRINCIPAL
+# REMOVED: permissions: id-token: write (this is specifically for OIDC and should NOT be here)
 
 env:
-  AZURE_WEBAPP_NAME: casecraft-app
+  AZURE_WEBAPP_NAME: casecraft-app         # <<< IMPORTANT: REPLACE WITH YOUR AZURE APP SERVICE NAME >>>
   PHP_VERSION: '8.4'
   NODE_VERSION: '22'
 
@@ -23,14 +23,14 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Authenticate using Service Principal - explicitly specifying auth-type
+    # Authenticate using Service Principal - NO 'auth-type' explicitly specified
     - name: Azure Login
-      uses: azure/login@v1
+      uses: azure/login@v1 # Keep using v1 as v2 might default to OIDC behavior
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        auth-type: SERVICE_PRINCIPAL # <<< CORRECTED: Using 'SERVICE_PRINCIPAL' >>>
+        # REMOVED: auth-type: SERVICE_PRINCIPAL (it's the default when secrets are provided)
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
