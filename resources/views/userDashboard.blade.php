@@ -13,6 +13,7 @@
          ],
     ];
 
+    // A small change 
     // These now correctly pull from $reqdData coming from your controller
     $easySolved = $reqdData['questionsInfo']['easySolved'] ?? 0;
     $mediumSolved = $reqdData['questionsInfo']['mediumSolved'] ?? 0;
