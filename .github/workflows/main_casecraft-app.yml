@@ -8,12 +8,13 @@ on:
       - main
   workflow_dispatch:
 
-# REMOVED: permissions: id-token: write (this is specifically for OIDC and should NOT be here)
+permissions:
+  id-token: write # <<< THIS IS REQUIRED FOR OIDC AUTHENTICATION >>>
 
 env:
   AZURE_WEBAPP_NAME: casecraft-app         # <<< IMPORTANT: REPLACE WITH YOUR AZURE APP SERVICE NAME >>>
   PHP_VERSION: '8.4'
-  NODE_VERSION: '22'
+  NODE_VERSION: '22' # Using Node 22
 
 jobs:
   build-and-deploy:
@@ -23,14 +24,16 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Authenticate using Service Principal - NO 'auth-type' explicitly specified
+    # Authenticate using OIDC (OpenID Connect)
     - name: Azure Login
-      uses: azure/login@v1 # Keep using v1 as v2 might default to OIDC behavior
+      uses: azure/login@v1 # Keep using v1
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
-        # REMOVED: auth-type: SERVICE_PRINCIPAL (it's the default when secrets are provided)
+        auth-type: OIDC # <<< Explicitly setting OIDC authentication type >>>
+        # client-secret is NOT needed here for OIDC, as authentication happens via the OIDC token exchange
+        # and the Federated Credential configuration in Azure AD.
 
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
