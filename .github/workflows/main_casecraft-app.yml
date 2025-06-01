@@ -21,18 +21,23 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
+    # <<< THIS IS THE AZURE LOGIN STEP THAT USES YOUR SECRETS >>>
+    - name: Azure Login
+      uses: azure/login@v1 # Using v1 is sufficient for this purpose
+      with:
+        client-id: ${{ secrets.AZURE_CLIENT_ID }}
+        tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+        subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ env.PHP_VERSION }}
-        # Add any other PHP extensions your app needs beyond the default
-        extensions: pdo_sqlite, gd, exif, bcmath, mbstring # Common extensions, adjust as needed
+        extensions: pdo_sqlite, gd, exif, bcmath, mbstring # Add any other PHP extensions your app needs
         tools: composer
         ini-values: post_max_size=100M, upload_max_filesize=100M # Example INI values if needed
 
     - name: Install Composer Dependencies
-      # --no-dev: Skip development dependencies
-      # --optimize-autoloader: Generate an optimized autoloader for production
       run: composer install --no-dev --optimize-autoloader
 
     - name: Set up Node.js
@@ -42,7 +47,6 @@ jobs:
         cache: 'npm' # Cache node modules for faster builds
 
     - name: Install Frontend Dependencies and Build
-      # This assumes your npm run build script correctly outputs to public/build
       run: |
         npm install
         npm run build
@@ -53,11 +57,5 @@ jobs:
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
         slot-name: 'production' # Keep as 'production' unless you use deployment slots
-        # This secret must be configured in your GitHub repository settings
-        # (Settings -> Secrets and variables -> Actions -> New repository secret)
-        # The value comes from your Azure App Service's Publish Profile
-        publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-        # This will deploy the entire contents of the current directory (your repo root)
-        # to the /home/site/wwwroot/ directory on your App Service.
-        # This includes your public/build, vendor/, and database/ directories.
+        # The 'publish-profile' line is NOT here because azure/login handles authentication.
         package: .
