@@ -24,15 +24,15 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v3
 
-    # Authenticate using OIDC (OpenID Connect)
+    # Authenticate using OIDC (OpenID Connect) with azure/login@v2
     - name: Azure Login
-      uses: azure/login@v1 # Keep using v1
+      uses: azure/login@v2 # <<< CHANGED TO v2 TO SUPPORT OIDC >>>
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
         subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
         auth-type: OIDC # <<< Explicitly setting OIDC authentication type >>>
-        # client-secret is NOT needed here for OIDC, as authentication happens via the OIDC token exchange
+        # client-secret is NOT needed here for OIDC with v2/v3, as authentication happens via the OIDC token exchange
         # and the Federated Credential configuration in Azure AD.
 
     - name: Set up PHP
