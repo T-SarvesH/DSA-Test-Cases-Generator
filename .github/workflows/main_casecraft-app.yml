@@ -26,7 +26,7 @@ jobs:
 
     # Authenticate using OIDC (OpenID Connect) with azure/login@v2
     - name: Azure Login
-      uses: azure/login@v2 # <<< CHANGED TO v2 TO SUPPORT OIDC >>>
+      uses: azure/login@v3 # <<< CHANGED TO v2 TO SUPPORT OIDC >>>
       with:
         client-id: ${{ secrets.AZURE_CLIENT_ID }}
         tenant-id: ${{ secrets.AZURE_TENANT_ID }}
